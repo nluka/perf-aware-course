@@ -1,0 +1,5 @@
+interm*/
+.vscode/
+.vs/
+*.exe
+*.pdb
