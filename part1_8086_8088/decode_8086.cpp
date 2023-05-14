@@ -7,11 +7,7 @@
 
 namespace fs = std::filesystem;
 
-#define CRASH_IF(cond) \
-   if (cond) { \
-      std::cout << "error, " << #cond << '\n'; \
-      std::exit(1); \
-   }
+#define CRASH_IF(cond) if (cond) { std::cout << "error, " << #cond << '\n'; std::exit(1); }
 
 int main(int argc, char const **argv) {
    if (argc != 2) {
