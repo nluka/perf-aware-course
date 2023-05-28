@@ -10,7 +10,6 @@
     - Performance is not so much about hardcore optimization, but more like coming to our senses and eliminating unnecessary waste
 - Instructions per Clock (IPC)
     - The average number of instructions the CPU executes on every clock cycle
-    - Based on the fact that most CPUs can execute more than one instruction a
     - Based on the fact that most CPUs can execute more than one instruction at a time
     - One way is to "unroll" a loop and ratio between the work (e.g. add) and overhead (e.g. loop cond, counter inc)
     - In the case of the rolling summation loop, unrolling the loop resulted in a serial dependency chain, so the CPU must do them in order
@@ -34,11 +33,11 @@
     - Caching can make or break an algorithm - memory access is crucial to get right
 - Multithreading
     - Workloads that are memory bound can be saved by multithreading because the division of work can result in data fitting into the smaller (and faster) caches
-    - If a workload is not memory bound, the maximum speedup we can expect if Nx where N is the number of threads, 
-      if a workload IS memory bound, we can expect much more than NX
+    - If a workload is not memory bound, the maximum speedup we can expect is Nx where N is the number of threads, 
+      if a workload IS memory bound, we can expect much more than Nx
     - By increasing the number of cores for an algorithm, we not only increase the number of instruction streams, 
       but also the amount of cache we can work with since the fast caches are per core
-    - Some chips are designed so that a single core gets most of the potential memory bandwidth, so adding cores gives you little extra bandwidth,
+    - Some chips are designed so that a single core gets most of the potential memory bandwidth, so using more cores gives you little extra bandwidth,
       other chips are designed so that a single core gets a certain amount of memory bandwidth and adding cores linearly increases your memory bandwidth,
       so the amount of extra memory bandwidth acquired per core is heavily dependent on the chip
 
