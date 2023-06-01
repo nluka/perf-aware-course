@@ -4,6 +4,7 @@
 #include <fstream>
 #include <cstring>
 #include <cassert>
+#include <numeric>
 
 namespace fs = std::filesystem;
 
@@ -64,6 +65,7 @@ int main(int argc, char const **argv) {
       auto const decode_register = [](bool const wide, uint8_t const code, char *out) {
          if (wide) {
             char const *reg;
+
             if      ((code & 0b111) == 0b111) reg = "di";
             else if ((code & 0b110) == 0b110) reg = "si";
             else if ((code & 0b101) == 0b101) reg = "bp";
@@ -72,6 +74,7 @@ int main(int argc, char const **argv) {
             else if ((code & 0b010) == 0b010) reg = "dx";
             else if ((code & 0b001) == 0b001) reg = "cx";
             else    /* 0b000 */               reg = "ax";
+
             std::memcpy(out, reg, 2);
          } else {
             if      ((code & 0b11) == 0b11) out[0] = 'b';
@@ -79,9 +82,8 @@ int main(int argc, char const **argv) {
             else if ((code & 0b01) == 0b01) out[0] = 'c';
             else    /* 0b00 */              out[0] = 'a';
 
-            bool const highestBitSet = code & 0b100;
-            if (highestBitSet) out[1] = 'h';
-            else               out[1] = 'l';
+            bool const highest_bit_set = code & 0b100;
+            out[1] = highest_bit_set ? 'h' : 'l';
          }
       };
 
