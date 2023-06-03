@@ -6,51 +6,14 @@
 #include <cassert>
 #include <numeric>
 
-namespace fs = std::filesystem;
+#include "primitives.hpp"
 
-#define CRASH_IF(cond) if (cond) { std::cout << "error, " << #cond << '\n'; std::exit(1); }
-
-int main(int argc, char const **argv) {
-   if (argc != 2) {
-      puts("usage: decode_8086 <file_path>");
-      return 1;
-   }
-
-   std::vector<uint8_t> instruction_stream;
-
-   {
-      [[maybe_unused]] auto const cwd = fs::current_path();
-
-      char const *file_path = argv[1];
-      if (!fs::is_regular_file(file_path)) {
-         std::cout << "error, not a regular file\n";
-         std::exit(1);
-      }
-
-      size_t const file_size = static_cast<size_t>(fs::file_size(file_path));
-      assert(file_size <= (size_t)std::numeric_limits<std::streamsize>::max());
-
-      instruction_stream.resize(file_size);
-
-      std::ifstream file(file_path, std::ios::binary);
-      CRASH_IF(!file);
-
-      try {
-         file.read(reinterpret_cast<char *>(instruction_stream.data()), std::streamsize(file_size));
-      } catch (std::exception const &except) {
-         std::cout << "error reading file, " << except.what() << '\n';
-         std::exit(1);
-      }
-
-      CRASH_IF(static_cast<size_t>(file.gcount()) != file_size);
-   }
-
-   CRASH_IF(instruction_stream.empty());
-   CRASH_IF(instruction_stream.size() & 1);
+std::string decode_8086_instruction_stream(std::vector<u8> const &instruction_stream) {
+   std::stringstream asm_out{};
 
    for (size_t i = 0; i < instruction_stream.size(); i += 2) {
-      uint8_t const byte1 = instruction_stream[i];
-      uint8_t const byte2 = instruction_stream[i + 1];
+      u8 const byte1 = instruction_stream[i];
+      u8 const byte2 = instruction_stream[i + 1];
 
       bool const good_opcode = (byte1 >> 2) & 0b100010;
       bool const dest_comes_first = (byte1 & 0b10);
@@ -95,8 +58,53 @@ int main(int argc, char const **argv) {
       decode_register(is_wide, dst_register_code, dst_register_str);
       decode_register(is_wide, src_register_code, src_register_str);
 
-      std::cout << "mov " << dst_register_str << ", " << src_register_str << '\n';
+      asm_out << "mov " << dst_register_str << ", " << src_register_str << '\n';
    }
 
-   return 0;
+   return asm_out.str();
 }
+
+// namespace fs = std::filesystem;
+
+// #define CRASH_IF(cond) if (cond) { std::cout << "error, " << #cond << '\n'; std::exit(1); }
+
+// int main(int argc, char const **argv) {
+//    if (argc != 2) {
+//       puts("usage: decode_8086 <file_path>");
+//       return 1;
+//    }
+
+//    std::vector<uint8_t> instruction_stream;
+
+//    {
+//       [[maybe_unused]] auto const cwd = fs::current_path();
+
+//       char const *file_path = argv[1];
+//       if (!fs::is_regular_file(file_path)) {
+//          std::cout << "error, not a regular file\n";
+//          std::exit(1);
+//       }
+
+//       size_t const file_size = static_cast<size_t>(fs::file_size(file_path));
+//       assert(file_size <= (size_t)std::numeric_limits<std::streamsize>::max());
+
+//       instruction_stream.resize(file_size);
+
+//       std::ifstream file(file_path, std::ios::binary);
+//       CRASH_IF(!file);
+
+//       try {
+//          file.read(reinterpret_cast<char *>(instruction_stream.data()), std::streamsize(file_size));
+//       } catch (std::exception const &except) {
+//          std::cout << "error reading file, " << except.what() << '\n';
+//          std::exit(1);
+//       }
+
+//       CRASH_IF(static_cast<size_t>(file.gcount()) != file_size);
+//    }
+
+//    CRASH_IF(instruction_stream.empty());
+//    CRASH_IF(instruction_stream.size() & 1);
+
+//    return 0;
+// }
