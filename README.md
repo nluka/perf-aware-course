@@ -2,7 +2,7 @@
 
 ## The 5 multipliers of slow software
 
-- Waste
+- Waste (1.2)
 
     - The biggest multiple
 
@@ -13,7 +13,7 @@
     - Performance is not so much about hardcore optimization, but more like coming to our senses
       and eliminating unnecessary waste
 
-- Instructions per Clock (IPC)
+- Instructions per Clock (IPC) (1.3)
 
     - The average number of instructions the CPU executes on every clock cycle
 
@@ -27,7 +27,7 @@
     - By breaking the one long serial dependency chain, we unlock the ILP capabilities of the chip
       and get a significant perf boost
 
-- Single Instruction, Multiple Data (SIMD)
+- Single Instruction, Multiple Data (SIMD) (1.4)
 
     - CPU design based on the observation that if you are doing the same operation on many pieces
       of data, do them as one instruction to avoid the need to decode multiple instructions
@@ -45,7 +45,7 @@
 
     - Performance multipler is not as powerful when caching is bad
 
-- Caching
+- Caching (1.5)
 
     - The idea of creating smaller but faster storage as part of the CPU core and thus closer to the ALU,
       to avoid always paying RAM access cost
@@ -59,7 +59,7 @@
 
     - Caching can make or break an algorithm - memory access is crucial to get right
 
-- Multithreading
+- Multithreading (1.6)
 
     - Workloads that are memory bound can be saved by multithreading because the division of work
       can result in data fitting into the smaller (and faster) caches
@@ -75,4 +75,40 @@
       other chips are designed so that a single core gets a certain amount of memory bandwidth and
       adding cores linearly increases your memory bandwidth,
       so the amount of extra memory bandwidth acquired per core is heavily dependent on the chip
+
+- Python Revisited (1.7)
+
+    - The purpose of the course is not to max out performance, but to understand how the performance "gulf" works,
+      so that we could achieve some reasonable middleground between bad and perfect/max performance
+
+    - There's only 2 things you can do to improve performance
+        1. Reduce the number of instruction the CPU must process
+        2. Increase the speed at which instruction are executed by the CPU
+
+    - Hardware behaviour categorization:
+        1. Waste -> Reduce
+        2. IPC/ILP -> Increase
+        3. SIMD -> Reduce
+        4. Caching -> Increase
+        5. Multithreading -> Increase
+
+- Decoding on the 8086 (2.1)
+
+    - 16 bit registers
+
+    - Any operation consists of moving memory into a register across a bus, did some work, then moved the register
+      data back out ot memory
+
+    - Before any operation can be performed, we need to decode the instruction stream to understand WHAT we are
+      going to do
+
+    - Mnemonic: a human friendly name of an operation the CPU can do
+
+- Decoding Multiple Instructions and Suffixes (2.2)
+
+    - Homework: 
+        full MOV decode
+        1011 opcode decode 
+        MOV [BP+75], byte|word 12
+        pages 162, 164
 
